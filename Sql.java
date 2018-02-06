@@ -227,7 +227,7 @@ public class Sql {
 		try {
 			Sql test = new Sql();
 			// System.out.println(testTry(test));
-			System.out.println(test.getConnection("192.168.88.201", "test", "test", "123456"));
+			System.out.println(test.getConnection("127.0.0.1", "test", "test", "123456"));
 			List<Object> list = new ArrayList<Object>();
 			list.add("test");
 			ResultSet rs = test.getResult("SELECT user,password FROM user WHERE user= ?", list);
@@ -244,7 +244,7 @@ public class Sql {
 		for (int i = 0; i < 5; i++) {
 			// Hardware h = new Hardware(i, "" + i);
 			try {
-				if (test.getConnection("192.168.88.228", "test", "test", "123456")) {
+				if (test.getConnection("127.0.0.1", "test", "test", "123456")) {
 					// test.Insert(h);
 				}
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -256,7 +256,7 @@ public class Sql {
 
 	public static boolean testTry(Sql test) {
 		try {
-			return test.getConnection("192.168.88.201", "test", "test", "123456");
+			return test.getConnection("127.0.0.1", "test", "test", "123456");
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -269,7 +269,7 @@ public class Sql {
 	public static void listAll() {
 		Sql sql = new Sql();
 		try {
-			sql.getConnection("192.168.88.201", "test", "test", "123456");
+			sql.getConnection("127.0.0.1", "test", "test", "123456");
 			ResultSet rs = null;
 			rs = sql.getResult("SELECT * FROM user", null);
 			phase(rs);
