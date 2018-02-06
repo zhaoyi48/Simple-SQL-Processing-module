@@ -214,9 +214,8 @@ public class Sql {
 				}
 			}
 			System.out.println(pstmt.toString());
-			if (pstmt.execute()) {
-				return true;
-			}
+			pstmt.execute();
+			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
