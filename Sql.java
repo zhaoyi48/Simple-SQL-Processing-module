@@ -111,26 +111,7 @@ public class Sql {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(s1);
 			if (list != null) {
-				int all = list.size();
-				System.out.println("list-length:" + all);
-				for (int i = 0; i < all; i++) {
-					Object obj = list.get(i);
-					if (obj.getClass() == String.class) {
-						pstmt.setString(i + 1, (String) obj);
-					}
-					else if (obj.getClass() == Integer.class) {
-						pstmt.setInt(i + 1, (Integer) obj);
-					}
-					else if (obj.getClass() == Float.class) {
-						pstmt.setFloat(i + 1, (Float) obj);
-					}
-					else if (obj.getClass() == LocalDate.class) {
-						pstmt.setDate(i + 1, java.sql.Date.valueOf((LocalDate) obj));
-					}
-					else if (obj.getClass() == LocalTime.class) {
-						pstmt.setTime(i + 1, java.sql.Time.valueOf((LocalTime) obj));
-					}
-				}
+				pstmt=generatePstmt(pstmt, list);
 			}
 			System.out.println(pstmt.toString());
 			if (pstmt.execute()) {
@@ -158,24 +139,11 @@ public class Sql {
 				}
 				System.out.println(s1);
 				PreparedStatement pstmt = conn.prepareStatement(s1);
-				System.out.println("list-length:" + all);
-				for (int i = 0; i < all; i++) {
-					Object obj1 = list1.get(i);
-					if (obj1.getClass() == String.class) {
-						pstmt.setString(i + 1, (String) obj1);
-					}
-					else if (obj1.getClass() == Integer.class) {
-						pstmt.setInt(i + 1, (Integer) obj1);
-					}
-					else if (obj1.getClass() == Float.class) {
-						pstmt.setFloat(i + 1, (Float) obj1);
-					}
-					else if (obj1.getClass() == LocalDate.class) {
-						pstmt.setDate(i + 1, java.sql.Date.valueOf((LocalDate) obj1));
-					}
-					else if (obj1.getClass() == LocalTime.class) {
-						pstmt.setTime(i + 1, java.sql.Time.valueOf((LocalTime) obj1));
-					}
+				if(list.size()==list1.size()) {
+					pstmt=generatePstmt(pstmt, list1);
+				}
+				else {
+					return null;
 				}
 				System.out.println(pstmt.toString());
 				if (pstmt.execute()) {
@@ -193,26 +161,7 @@ public class Sql {
 	public boolean IDU(String s1, List<Object> list) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(s1);
-			int all = list.size();
-			System.out.println("list-length:" + all);
-			for (int i = 0; i < all; i++) {
-				Object obj = list.get(i);
-				if (obj.getClass() == String.class) {
-					pstmt.setString(i + 1, (String) obj);
-				}
-				else if (obj.getClass() == Integer.class) {
-					pstmt.setInt(i + 1, (Integer) obj);
-				}
-				else if (obj.getClass() == Float.class) {
-					pstmt.setFloat(i + 1, (Float) obj);
-				}
-				else if (obj.getClass() == LocalDate.class) {
-					pstmt.setDate(i + 1, java.sql.Date.valueOf((LocalDate) obj));
-				}
-				else if (obj.getClass() == LocalTime.class) {
-					pstmt.setTime(i + 1, java.sql.Time.valueOf((LocalTime) obj));
-				}
-			}
+			pstmt=generatePstmt(pstmt, list);
 			System.out.println(pstmt.toString());
 			pstmt.execute();
 			return true;
@@ -222,12 +171,39 @@ public class Sql {
 		}
 		return false;
 	}
+	
+	protected static PreparedStatement generatePstmt(PreparedStatement pstmt,List<Object> list) throws SQLException {
+		int all = list.size();
+		System.out.println("list-length:" + all);
+		for (int i = 0; i < all; i++) {
+			Object obj = list.get(i);
+			if (obj.getClass() == String.class) {
+				pstmt.setString(i + 1, (String) obj);
+			}
+			else if (obj.getClass() == Integer.class) {
+				pstmt.setInt(i + 1, (Integer) obj);
+			}
+			else if (obj.getClass() == Float.class) {
+				pstmt.setFloat(i + 1, (Float) obj);
+			}
+			else if (obj.getClass() == Double.class) {
+				pstmt.setDouble(i + 1, (Double) obj);
+			}
+			else if (obj.getClass() == LocalDate.class) {
+				pstmt.setDate(i + 1, java.sql.Date.valueOf((LocalDate) obj));
+			}
+			else if (obj.getClass() == LocalTime.class) {
+				pstmt.setTime(i + 1, java.sql.Time.valueOf((LocalTime) obj));
+			}
+		}
+		return pstmt;
+	}
 
 	public static void main(String[] args) {
 		try {
 			Sql test = new Sql();
 			// System.out.println(testTry(test));
-			System.out.println(test.getConnection("127.0.0.1", "test", "test", "123456"));
+			System.out.println(test.getConnection("192.168.88.201", "test", "test", "123456"));
 			List<Object> list = new ArrayList<Object>();
 			list.add("test");
 			ResultSet rs = test.getResult("SELECT user,password FROM user WHERE user= ?", list);
@@ -244,7 +220,7 @@ public class Sql {
 		for (int i = 0; i < 5; i++) {
 			// Hardware h = new Hardware(i, "" + i);
 			try {
-				if (test.getConnection("127.0.0.1", "test", "test", "123456")) {
+				if (test.getConnection("192.168.88.228", "test", "test", "123456")) {
 					// test.Insert(h);
 				}
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -256,7 +232,7 @@ public class Sql {
 
 	public static boolean testTry(Sql test) {
 		try {
-			return test.getConnection("127.0.0.1", "test", "test", "123456");
+			return test.getConnection("192.168.88.201", "test", "test", "123456");
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -269,7 +245,7 @@ public class Sql {
 	public static void listAll() {
 		Sql sql = new Sql();
 		try {
-			sql.getConnection("127.0.0.1", "test", "test", "123456");
+			sql.getConnection("192.168.88.201", "test", "test", "123456");
 			ResultSet rs = null;
 			rs = sql.getResult("SELECT * FROM user", null);
 			phase(rs);
